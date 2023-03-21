@@ -1,0 +1,9 @@
+pandas==1.5.3
+tqdm==4.65.0
+numba==0.56.4
+cvxpy==1.2.2
+mosek==10.0.27
+tyro==0.4.2
+ipykernel==6.22.0
+matplotlib==3.7.1
+ipympl==0.9.3
