@@ -1,4 +1,4 @@
-from geometry_utils import so3, se3
+from triangulation_relaxations import so3, se3
 import numpy as np
 
 

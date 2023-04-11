@@ -1,9 +1,9 @@
 import scipy
 import numpy as np
 
-from geometry_utils import so3, se3, geometry
-from geometry_utils.se3 import Se3
-from semidefinite_relaxation import SDR, one_hot, one_hot_matrix
+from triangulation_relaxations import so3, se3, geometry
+from triangulation_relaxations.se3 import Se3
+from triangulation_relaxations.semidefinite_relaxation import SDR, one_hot, one_hot_matrix
 
 
 class TriangulationProblem:

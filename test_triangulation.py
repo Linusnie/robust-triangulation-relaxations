@@ -2,7 +2,7 @@ import numpy.testing
 import unittest
 import numpy as np
 
-from geometry_utils import triangulation, geometry
+from triangulation_relaxations import triangulation, geometry
 
 
 class TestTriangulation(unittest.TestCase):

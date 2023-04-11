@@ -4,7 +4,7 @@ import blender_plots.blender_utils as bu
 import numpy as np
 from tqdm import tqdm
 
-from geometry_utils import geometry
+from triangulation_relaxations import geometry
 
 ydown2zup = np.array([
     [0, 0, 1, 0],

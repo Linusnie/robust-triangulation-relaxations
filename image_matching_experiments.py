@@ -4,8 +4,8 @@ from tqdm.auto import tqdm
 from pathlib import Path
 from datetime import datetime
 
-from geometry_utils import triangulation
-from geometry_utils.se3 import Se3
+from triangulation_relaxations import triangulation
+from triangulation_relaxations.se3 import Se3
 from simulation_experiments import solve_problem, itemtqdm, save_results
 
 from colmap.scripts.python.read_write_model import read_model, qvec2rotmat

@@ -8,7 +8,7 @@ from datetime import datetime
 import pickle
 import cvxpy
 
-from geometry_utils import triangulation
+from triangulation_relaxations import triangulation
 
 default_solver_params = {
     "SCS": {"eps_abs": 1e-12, "eps_rel": 1e-12},

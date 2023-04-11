@@ -1,4 +1,4 @@
-from geometry_utils import so3
+from triangulation_relaxations import so3
 from scipy.interpolate import interp1d
 
 import numpy
