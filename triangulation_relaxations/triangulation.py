@@ -26,6 +26,10 @@ class TriangulationProblem:
     def F(self):
         return geometry.get_fundamental(se3.get_relative(self.poses), self.K_inv)
 
+    @property
+    def E(self):
+        return geometry.get_essential(se3.get_relative(self.poses))
+
     def __str__(self):
         return f"Triangulation problem\n" \
                f"n_poses: {len(self.poses)}\n" \
@@ -161,7 +165,7 @@ class RobustTriangulationSDR(SDR):
         _, s_sdr, vt = np.linalg.svd(self.X.value)
         z = vt[0]
         points = z[:-1].reshape((self.n_poses, 3)) / z[-1]
-        inlier_mask = np.round(points[:, -1]).astype(np.bool)
+        inlier_mask = np.round(points[:, -1]).astype(bool)
 
         K = np.array([self.K for _ in range(self.n_poses)]) if self.K.ndim == 2 else self.K
         estimated_point, s_algebraic = triangulate_algebraic(points[inlier_mask, :2], self.poses[inlier_mask],
@@ -312,7 +316,7 @@ class RobustTriangulationFractionalSDR(SDR):
         z = vt[0]
         z /= np.linalg.norm(z[-4:])
         v, estimated_point = self.decompose_kronecker(z, 3 * self.n_poses + 1, 4)
-        inlier_mask = np.round(v[:-1].reshape(self.n_poses, 3)[:, -1]).astype(np.bool)
+        inlier_mask = np.round(v[:-1].reshape(self.n_poses, 3)[:, -1]).astype(bool)
         estimated_point = estimated_point[:-1] / estimated_point[-1]  # TODO: handle points at infinity
         success = s[1] < eps
         return {
@@ -497,6 +501,20 @@ def triangulate_algebraic(observations, poses, K=None):
     estimated_point = vt[-1]
     return estimated_point[:-1] / estimated_point[-1], s
 
+def triangulate_midpoint(observations, poses, K):
+    view_dirs = np.einsum('...li, ...ij, ...j -> ...l', poses.R, np.linalg.inv(K), geometry.homogenize(observations, normalize=False))
+    view_dirs /= np.linalg.norm(view_dirs, axis=-1, keepdims=True)
+
+    M = np.zeros((3, 3))
+    b = np.zeros(3)
+
+    for i in range(len(poses)):
+        P = np.eye(3) - np.outer(view_dirs[i], view_dirs[i])
+        M += P.T @ P
+        b += P.T @ P @ poses.t[i]
+
+    x_midpoint = np.linalg.inv(M) @ b
+    return x_midpoint
 
 def add_outliers(observations: np.array, n: int, height, width, c=None, outliers_last=False, check_reprojection=True):
     n_poses = len(observations)
