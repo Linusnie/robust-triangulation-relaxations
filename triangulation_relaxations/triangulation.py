@@ -510,8 +510,8 @@ def triangulate_midpoint(observations, poses, K):
 
     for i in range(len(poses)):
         P = np.eye(3) - np.outer(view_dirs[i], view_dirs[i])
-        M += P.T @ P
-        b += P.T @ P @ poses.t[i]
+        M += P
+        b += P @ poses.t[i]
 
     x_midpoint = np.linalg.inv(M) @ b
     return x_midpoint
