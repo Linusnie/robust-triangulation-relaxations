@@ -26,7 +26,7 @@ def solve_problem(problem, observations, method, solver='MOSEK'):
     try:
         t_start = time.time()
         sdr.solve(solver=solver, warm_start=False, **solver_params)
-        t = t_start - time.time()
+        t = time.time() - t_start 
         results = sdr.get_solution(eps=1e-4)
         cost = triangulation.robust_cost(
             point=results["estimated_point"],
